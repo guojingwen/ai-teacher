@@ -23,8 +23,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "node scripts/start.js --PUBLIC_URL ai-teacher",
+    "build": "node scripts/build.js --PUBLIC_URL ai-teacher",
     "test": "node scripts/test.js",
     "stylelint": "stylelint 'src/**/*.{scss,css}'"
   },

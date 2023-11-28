@@ -10,10 +10,13 @@ import Assistant from './pages/assistant';
 import App from '@/App';
 import { initDB } from './dbs/db';
 
-const router = createBrowserRouter([
-  { path: '/', element: <Home />, errorElement: <Home /> },
-  { path: '/assistant', element: <Assistant /> },
-]);
+const router = createBrowserRouter(
+  [
+    { path: '/', element: <Home />, errorElement: <Home /> },
+    { path: '/assistant', element: <Assistant /> },
+  ],
+  { basename: '/ai-teacher' }
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
