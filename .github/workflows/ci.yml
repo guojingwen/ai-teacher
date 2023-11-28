@@ -1,0 +1,28 @@
+name: ssh fe command
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+      - 'tests/**'
+      - 'src/**'
+      - 'config/**'
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/ubuntu/github/ai-teacher &&
+            git pull &&
+            pnpm i &&
+            npm run build &&
+            cp -r ./build/*  /home/ubuntu/myDockerFiles/nginx/html/static/ai-teacher
