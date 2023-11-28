@@ -1,4 +1,4 @@
-name: ssh fe command
+name: ssh-static-command
 on:
   push:
     branches:
