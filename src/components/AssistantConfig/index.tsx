@@ -1,7 +1,7 @@
 import { EditAssistant, Model } from '@/types';
 import React, { FormEvent, useState } from 'react';
-import { Button, Input, Select } from '@mantine/core';
 import { IconDeviceFloppy, IconTrash } from '@tabler/icons-react';
+import { Button, Input, Select } from '@mantine/core';
 
 const { Wrapper } = Input;
 
