@@ -1,0 +1,27 @@
+/* stylelint check */
+/* stylelint-disable-next-line comment-empty-line-before */
+/* 本文用于验证stylelint配置是否生效，请安装VSCode插件 */
+.app {
+  a {
+    display: grid;
+    grid-template-areas:
+      'a a'
+      'b b'; /* 无效的东西，`grid-area`值不对 */
+    color: red; /* 有问题的东西，例如属性名称拼写错误 */
+  }
+
+  /* 有疑问的东西，例如重复选择器 */
+  /* stylelint-disable-next-line no-duplicate-selectors */
+  a {
+    --foo: 1rem; /* 强制命名模式，例如对于自定义属性采用短横线 */
+    --bar-bar: 2rem;
+    width: 20rem; /*  禁止某些规则，例如具体某个单位 */
+    height: 10rem;
+  }
+
+  /* 设定限制，例如ID选择器的数量 */
+  /* stylelint-disable-next-line selector-max-id */
+  #foo #bar {
+    color: red;
+  }
+}
