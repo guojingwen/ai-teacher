@@ -1,0 +1,8 @@
+.border-0 .mantine-Input-input {
+  border-width: 0 !important;
+  height: 3rem !important;
+}
+.bg-black\/10 .mantine-Input-input {
+  background-color: rgb(26,27,30);
+}
+

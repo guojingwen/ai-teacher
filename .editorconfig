@@ -1,0 +1,22 @@
+# https://editorconfig.org
+
+# 已经是顶层配置文件，不必继续向上搜索
+root = true
+
+[*]
+# 编码字符集
+charset = utf-8
+# 缩进风格是空格
+indent_style = space
+# 一个缩进占用两个空格，因没有设置tab_with，一个Tab占用2列
+indent_size = 2
+# 换行符 lf
+end_of_line = lf
+# 文件以一个空白行结尾
+insert_final_newline = true
+# 去除行首的任意空白字符
+trim_trailing_whitespace = false
+
+[*.md]
+insert_final_newline = false
+trim_trailing_whitespace = false

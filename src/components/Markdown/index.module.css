@@ -1,0 +1,38 @@
+.mark {
+  font-family: Arial, sans-serif;
+  width: 100%;
+  /* padding: 0 1rem; */
+  border-spacing: 0;
+  color: var(--table-fg-color);
+}
+
+.mark th,
+.mark td {
+  padding: 8px;
+}
+
+.mark th {
+  background-color: var(--table-header-bg-color);
+  color: var(--table-header-fg-color);
+}
+
+.mark tr:nth-child(even) td {
+  background-color: var(--table-even-row-bg-color);
+}
+
+.mark tr:hover td {
+  background-color: var(--table-hover-row-bg-color);
+}
+
+.mark a {
+  color: var(--card-btn-background-hex);
+  text-decoration: underline;
+}
+
+.mark *:not(code) {
+  line-height: 1.8;
+}
+
+.mark code {
+  line-height: 1.2;
+}
