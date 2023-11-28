@@ -2,11 +2,26 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {},
+  "editor.codeActionsOnSave": {
+    // 文件保存时开启stylelint自动修复程序
+    "source.fixAll.stylelint": true
+  },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  // 防止编辑器内置linter与插件冲突设置
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  // 启用stylelint插件
+  "stylelint.enable": true,
+  // 如果不配置这一行，VSCode stylelint插件不工作
+  "stylelint.config": null,
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "stylelint.validate": ["css", "less", "postcss", "scss"]
 }

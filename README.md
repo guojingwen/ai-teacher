@@ -20,7 +20,9 @@
 
 ## 技术栈
 
-- 使用`React`+ `typescript`开发，样式使用 `tailwindcss`，UI 使用`@mantine/core`，使用`indexedDB`存储，无后端服务。
+- 项目使用`create-react-app`生成，命令： `npx create-react-app ai-teacher --template typescript`
+- 样式集成了 `tailwindcss`，UI 集成了`@mantine/core`，封装了`indexedDB`存储数据，无后端服务。
+
 - 代码规范方案： `editorConfig` + `prettier` + `eslint` + `commit`
 - CI:
 - CD: `Github Actions` + `docker-compose`

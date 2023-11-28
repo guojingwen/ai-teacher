@@ -280,6 +280,11 @@ const MessageComp = ({ session, assistant }: Props) => {
           return (
             <div key={`${item.role}-${idx}`} className={clsx('mt-4')}>
               <div className={clsx('flex', 'flex-row', 'mb-10')}>
+                <span
+                  style={{
+                    backgroundColor: 'ed',
+                    width: '100px',
+                  }}></span>
                 <div
                   className={clsx(
                     {

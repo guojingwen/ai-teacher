@@ -8,6 +8,7 @@
 
 .mark th,
 .mark td {
+  /* stylelint-disable-next-line unit-allowed-list */
   padding: 8px;
 }
 
