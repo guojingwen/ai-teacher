@@ -2,10 +2,7 @@
 
 ![image](./files/welcome.webp)
 
-<video width="320" height="240" controls>
-  <source src="./files/english-learn2.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[视频效果点这里](https://static.warmplace.cn/ai-teacher.mp4)
 
 项目目录如下
 
