@@ -2,7 +2,7 @@ import { Session } from '@/types';
 import { useMantineColorScheme } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import clsx from 'clsx';
-import { EdittableText } from '../EdittableText';
+import EdittableText from '../EdittableText';
 
 type Props = {
   session: Session;

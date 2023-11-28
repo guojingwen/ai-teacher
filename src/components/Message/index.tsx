@@ -26,8 +26,7 @@ import {
   Session,
 } from '@/types';
 import clsx from 'clsx';
-import { Voice } from '../Voice';
-import React from 'react';
+import Voice from '../Voice';
 import OpenAI from 'openai';
 import {
   arrayBufferToBase64,

@@ -5,7 +5,7 @@ type Props = {
   text: string;
   onSave: (name: string) => void;
 };
-export const EdittableText = (props: Props) => {
+const EdittableText = (props: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(props.text);
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,3 +59,5 @@ export const EdittableText = (props: Props) => {
     );
   }
 };
+
+export default EdittableText;

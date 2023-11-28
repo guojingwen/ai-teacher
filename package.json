@@ -32,11 +32,11 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "src/**/*.{css,scss,html,md}": [
+    "src/**/*.{css,scss,html}": [
       "prettier --write",
       "stylelint --allow-empty-input"
     ],
-    "src/**/*.{js,ts}": [
+    "src/**/*.{js,jsx,ts,tsx}": [
       "eslint --ext .js,.ts --quiet --fix",
       "jest --bail --passWithNoTests --findRelatedTests"
     ]
@@ -80,6 +80,7 @@
     ],
     "modulePaths": [],
     "moduleNameMapper": {
+      "^@/(.*)$": "ai-teacher/src/$1",
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
     },
@@ -149,6 +150,7 @@
     "postcss-loader": "^6.2.1",
     "postcss-normalize": "^10.0.1",
     "postcss-preset-env": "^7.0.1",
+    "prettier": "^3.1.0",
     "prompts": "^2.4.2",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",

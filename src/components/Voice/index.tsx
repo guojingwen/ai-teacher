@@ -15,7 +15,7 @@ const Mp3Recorder = new MicroRecorder({
 });
 
 let recordStart = Date.now();
-export function Voice() {
+export default function Voice() {
   const [isRecording, setIsRecording] = useState(false);
   const [isGranted, setIsGranted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
