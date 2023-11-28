@@ -61,6 +61,7 @@ const Assistant = () => {
   };
 
   const removeAssistant = async (id: string) => {
+    // todo 这里需要做伪删除，因为有会话与这个ID关联
     let newAssistantList = await assistionStore.removeAssistant(id);
     setAssistantList(newAssistantList);
     showNotification('移除成功');
