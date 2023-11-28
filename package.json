@@ -27,7 +27,19 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "stylelint": "stylelint 'src/**/*.{scss,css}'"
+    "stylelint": "stylelint 'src/**/*.{scss,css}'",
+    "lint": "npx lint-staged",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.{css,scss,html,md}": [
+      "prettier --write",
+      "stylelint --allow-empty-input"
+    ],
+    "src/**/*.{js,ts}": [
+      "eslint --ext .js,.ts --quiet --fix",
+      "jest --bail --passWithNoTests --findRelatedTests"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -96,6 +108,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.17.0",
@@ -125,6 +139,7 @@
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.0",
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",

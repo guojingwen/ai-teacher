@@ -92,11 +92,11 @@ export default function Home() {
     );
     setAssistant(assistant!);
   };
-  if (!session.id) return <div>loading</div>;
+  if (!session.id) return <div></div>;
   return (
-    <div className="h-screen w-screen flex">
+    <div className='h-screen w-screen flex'>
       <MediaQuery
-        smallerThan="md"
+        smallerThan='md'
         styles={{
           width: '0 !important',
           padding: '0 !important',
@@ -115,12 +115,12 @@ export default function Home() {
             'flex-col',
             'px-2'
           )}>
-          <div className="flex justify-between py-2 w-full">
+          <div className='flex justify-between py-2 w-full'>
             <ActionIcon
               onClick={() => createSession()}
-              color="green"
-              size="sm">
-              <IconMessagePlus size="1rem"></IconMessagePlus>
+              color='green'
+              size='sm'>
+              <IconMessagePlus size='1rem'></IconMessagePlus>
             </ActionIcon>
           </div>
           <div
@@ -147,7 +147,7 @@ export default function Home() {
         </div>
       </MediaQuery>
 
-      <div className="h-screen w-full flex flex-col items-center">
+      <div className='h-screen w-full flex flex-col items-center'>
         <NavHeader
           assistantId={assistant?.id || ''}
           onAssistantChange={onAssistantChange}
