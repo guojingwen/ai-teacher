@@ -2,10 +2,11 @@
 
 ![image](./files/welcome.webp)
 
-<video ><video>
-<video width="800" id="video" controls>
-<source src="./files/english-learn2.mp4" type="video/mp4">
+<video width="320" height="240" controls>
+  <source src="./files/english-learn2.mp4" type="video/mp4">
+  Your browser does not support the video tag.
 </video>
+
 项目目录如下
 
 ```txt
