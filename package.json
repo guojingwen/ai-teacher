@@ -2,6 +2,7 @@
   "name": "ai-teacher",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/ai-teacher",
   "dependencies": {
     "@mantine/core": "^6.0.21",
     "@mantine/hooks": "^7.2.2",
@@ -23,8 +24,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js --PUBLIC_URL ai-teacher",
-    "build": "node scripts/build.js --PUBLIC_URL ai-teacher",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "stylelint": "stylelint 'src/**/*.{scss,css}'"
   },
