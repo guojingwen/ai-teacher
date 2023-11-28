@@ -5,5 +5,5 @@ import MyComp from './index';
 test('renders --learn react link', () => {
   render(<MyComp text='Session' onSave={() => {}} />);
   const linkElement = screen.getByText(/Session/i);
-  expect(linkElement).toBeInTheDocument();
+  (expect(linkElement) as any).toBeInTheDocument();
 });

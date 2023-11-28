@@ -10,7 +10,7 @@
 
 通过这个项目帮你快速上手 ChatGPT 的前端开发
 
-注意： 运行这个项目你需要配置 `API_KEY` 这个在 [platform.openai.com](https://platform.openai.com/api-keys) 配置，[参考官方文档](https://platform.openai.com/docs/quickstart)
+注意： 运行这个项目你需要配置 `API_KEY` 这个在 [platform.openai.com](https://platform.openai.com/api-keys) 配置，[参考官方文档](https://platform.openai.com/docs/quickstart)，如何获取购买`Key`可以看我[这篇文章](https://blog.warmplace.cn/post/chatgpt#ChatGPT%E7%9A%84%E6%B3%A8%E5%86%8C%E4%BD%BF%E7%94%A8)
 
 ## 项目功能
 

@@ -9,6 +9,7 @@ import MicroRecorder from 'mic-recorder-to-mp3';
 import clsx from 'clsx';
 import events from '@/utils/event';
 import { notifications } from '@mantine/notifications';
+import { API_KEY } from '@/utils/constant';
 
 const Mp3Recorder = new MicroRecorder({
   bitRate: 128,
@@ -36,6 +37,10 @@ export default function Voice() {
     );
   });
   const start = () => {
+    if (!localStorage[API_KEY]) {
+      events.emit('needToken');
+      return;
+    }
     Mp3Recorder.start().then(() => {
       recordStart = Date.now();
       setIsRecording(true);
