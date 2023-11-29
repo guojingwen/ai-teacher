@@ -96,7 +96,7 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
         </Wrapper>
         <Wrapper
           label='上下文数'
-          description='每次对话记忆的泪是对话次数'>
+          description='每次对话记忆的对话次数'>
           <Input
             type='number'
             variant='filled'
