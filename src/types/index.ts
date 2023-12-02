@@ -53,3 +53,11 @@ export type AssistantList = Assistant[];
 
 export type EditAssistant = Omit<Assistant, 'id'> &
   Partial<Pick<Assistant, 'id'>>;
+export interface SelectSessionProps {
+  sessionList: SessionList;
+  createSession: any;
+  toSetSession: any;
+  updateSession: any;
+  removeSession: any;
+  sessionId: string;
+}

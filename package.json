@@ -48,7 +48,8 @@
     ]
   },
   "browserslist": [
-    "chrome >= 100"
+    "chrome >= 100",
+    "ios >= 15.0"
   ],
   "jest": {
     "roots": [

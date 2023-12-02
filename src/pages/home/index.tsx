@@ -11,6 +11,7 @@ import { audioInst } from '@/utils/utils';
 import { useMantineColorScheme, ActionIcon } from '@mantine/core';
 import clsx from 'clsx';
 import { IconMessagePlus } from '@tabler/icons-react';
+import device from '@/utils/device';
 
 export default function Home() {
   const { colorScheme } = useMantineColorScheme();
@@ -94,7 +95,11 @@ export default function Home() {
   };
   if (!session.id) return <div></div>;
   return (
-    <div className='h-screen w-screen flex'>
+    <div
+      className={clsx(['h-full', 'w-screen', 'flex'])}
+      style={{
+        height: device.isIos ? `${window.innerHeight}px` : '100vh',
+      }}>
       <MediaQuery
         smallerThan='md'
         styles={{
@@ -109,7 +114,7 @@ export default function Home() {
               'bg-gray-1s00': colorScheme === 'light',
             },
             'shadow',
-            'h-screen',
+            'h-full',
             'w-64',
             'flex',
             'flex-col',
@@ -147,10 +152,18 @@ export default function Home() {
         </div>
       </MediaQuery>
 
-      <div className='h-screen w-full flex flex-col items-center'>
+      <div className='h-full w-full flex flex-col items-center'>
         <NavHeader
           assistantId={assistant?.id || ''}
           onAssistantChange={onAssistantChange}
+          selectSessionProps={{
+            sessionList,
+            createSession,
+            toSetSession,
+            updateSession,
+            removeSession,
+            sessionId: session.id,
+          }}
         />
         <Message session={session} assistant={assistant!}></Message>
       </div>

@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import events from '@/utils/event';
 import { notifications } from '@mantine/notifications';
 import { API_KEY } from '@/utils/constant';
+import device from '@/utils/device';
 
 const Mp3Recorder = new MicroRecorder({
   bitRate: 128,
@@ -73,11 +74,11 @@ export default function Voice() {
   };
 
   return (
-    <ActionIcon
-      className='w-full flex flex-row items-center justify-center h-12'
-      disabled={isDisabled}
-      onMouseDown={start}
-      onMouseUp={end}>
+    <ActionComp
+      className='w-full flex flex-row items-center justify-center h-12 select-none'
+      isDisabled={isDisabled}
+      start={start}
+      end={end}>
       {isLoading ? (
         <div className='flex items-center text-slate-500'>
           <IconLoader2
@@ -93,6 +94,7 @@ export default function Voice() {
             },
             'flex',
             'items-center',
+            'select-none',
           ])}>
           <IconPointer className='mr-2' size='1rem'></IconPointer>
           按住说话~
@@ -100,6 +102,42 @@ export default function Voice() {
       )}
       <IconMicrophone
         color={isRecording ? 'red' : 'green'}></IconMicrophone>
-    </ActionIcon>
+    </ActionComp>
   );
+}
+
+function ActionComp({
+  isDisabled,
+  start,
+  end,
+  children,
+  className,
+}: {
+  isDisabled: boolean;
+  start: any;
+  end: any;
+  children: any;
+  className: string;
+}) {
+  if (!device.isMobile) {
+    return (
+      <ActionIcon
+        className={className}
+        disabled={isDisabled}
+        onMouseDown={start}
+        onMouseUp={end}>
+        {children}
+      </ActionIcon>
+    );
+  } else {
+    return (
+      <ActionIcon
+        className={className}
+        disabled={isDisabled}
+        onTouchStart={start}
+        onTouchEnd={end}>
+        {children}
+      </ActionIcon>
+    );
+  }
 }

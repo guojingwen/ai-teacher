@@ -22,11 +22,17 @@ export default function MessageContent({
   toSpeak,
 }: Props) {
   const isUser = item.role === 'user';
+  let _theColor = Colors.loading;
+  if (item.audioKey) {
+    // 语音消息
+    _theColor = Colors[item.audioState || 'done'];
+  }
+
   return (
     <div className='flex flex-col'>
       <div className='text-lg font-medium flex flex-row items-center'>
         {USERMAP[item.role] /*  + ' ' + item.audioKey */}
-        {item.audioKey ? (
+        {/* {item.audioKey ? (
           <ActionIcon onClick={() => toSpeak(item, index)}>
             <IconSpeakerphone
               color={Colors[item.audioState || 'done']}
@@ -34,7 +40,10 @@ export default function MessageContent({
           </ActionIcon>
         ) : (
           ''
-        )}
+        )} */}
+        <ActionIcon onClick={() => toSpeak(item, index)}>
+          <IconSpeakerphone color={_theColor} />
+        </ActionIcon>
       </div>
       <div
         className={clsx(

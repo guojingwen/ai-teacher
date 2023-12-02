@@ -257,8 +257,35 @@ const MessageComp = ({ session, assistant }: Props) => {
       setMessageList(newList);
     } else {
       audioState = 'playing';
-      const audioBase64 = await audioStore.getAudio(item.audioKey!);
+      if (item.audioKey) {
+        const audioBase64 = await audioStore.getAudio(item.audioKey!);
+        playVoice(newList, audioBase64, i);
+        return;
+      }
+      console.log('请求语音播放', item.content);
+      const client = new OpenAI({
+        apiKey: localStorage[API_KEY],
+        dangerouslyAllowBrowser: true,
+      });
+      const audio = await client.audio.speech.create({
+        model: 'tts-1',
+        voice: 'nova',
+        input: item.content,
+      });
+      const arrayBuffer = await audio.arrayBuffer();
+      const audioBase64 = await arrayBufferToBase64(arrayBuffer);
+
+      // 存储
+      const audioKey = await audioStore.addAudio(audioBase64);
+      const newItem: Message = {
+        ...item,
+        audioKey,
+        audioState,
+      };
+      await messageStore.updateMessage(newItem);
+      newList.splice(i, 1, newItem);
       playVoice(newList, audioBase64, i);
+      return;
     }
   };
   return (
@@ -271,7 +298,8 @@ const MessageComp = ({ session, assistant }: Props) => {
           'max-w-2xl',
           'overflow-y-auto',
           'rounded-sm',
-          'px-8',
+          'px-4',
+          'item-start',
         ])}
         ref={(_ref) => (scrollRef.current = _ref!)}>
         {messages.map((item, idx) => {
@@ -279,11 +307,6 @@ const MessageComp = ({ session, assistant }: Props) => {
           return (
             <div key={`${item.role}-${idx}`} className={clsx('mt-4')}>
               <div className={clsx('flex', 'flex-row', 'mb-10')}>
-                <span
-                  style={{
-                    backgroundColor: 'ed',
-                    width: '100px',
-                  }}></span>
                 <div
                   className={clsx(
                     {
@@ -320,9 +343,10 @@ const MessageComp = ({ session, assistant }: Props) => {
         className={clsx(
           'flex',
           'items-center',
-          'my-4',
           'w-full',
-          'max-w-xl'
+          'max-w-2xl',
+          'px-4',
+          'h-[4rem]'
         )}>
         <ActionIcon
           disabled={loading}
