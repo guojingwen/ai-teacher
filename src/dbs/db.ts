@@ -72,7 +72,7 @@ request.onupgradeneeded = function (event) {
   }
 };
 request.onsuccess = async function (event) {
-  console.log('onsuccess', event);
+  // console.log('onsuccess', event);
   _resolve(request.result);
   console.log('数据库打开成功');
   (window as any).myDb = request.result;

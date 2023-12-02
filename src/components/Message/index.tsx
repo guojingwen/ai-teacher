@@ -29,6 +29,7 @@ import clsx from 'clsx';
 import Voice from '../Voice';
 import OpenAI from 'openai';
 import {
+  Mp3Recorder,
   arrayBufferToBase64,
   audioInst,
   blobToBase64,
@@ -104,7 +105,6 @@ const MessageComp = ({ session, assistant }: Props) => {
         audioState: 'loading',
         content: suggestion,
       };
-      console.log('新增消息', getMode(), suggestion, newMsg);
       messageStore.addMessage(newMsg);
       newList = [...messages, newMsg];
     }
@@ -243,7 +243,6 @@ const MessageComp = ({ session, assistant }: Props) => {
     );
   };
   const toSpeak = async (item: Message, i: number) => {
-    console.log('toSpeak', item, i);
     const newList = getMessageList().slice();
     let audioState = item.audioState;
     if (audioState === 'loading') return;
@@ -258,7 +257,6 @@ const MessageComp = ({ session, assistant }: Props) => {
       setMessageList(newList);
     } else {
       if (device.isSafari || device.isIos) {
-        console.log('safari', item.audioKey);
         let audioBase64: string;
         let audioKey = item.audioKey;
         if (item.audioKey) {
@@ -314,6 +312,12 @@ const MessageComp = ({ session, assistant }: Props) => {
     const audioKey = await audioStore.addAudio(audioBase64);
     return [audioKey, audioBase64];
   }
+  const setModeWrap = (mode: string) => {
+    if (mode === 'text') {
+      Mp3Recorder.stop(); // 容错
+    }
+    setMode(mode);
+  };
   return (
     <>
       <div
@@ -376,7 +380,9 @@ const MessageComp = ({ session, assistant }: Props) => {
         )}>
         <ActionIcon
           disabled={loading}
-          onClick={() => setMode(mode === 'text' ? 'audio' : 'text')}>
+          onClick={() =>
+            setModeWrap(mode === 'text' ? 'audio' : 'text')
+          }>
           {mode !== 'text' ? (
             <IconKeyboard
               size={30}

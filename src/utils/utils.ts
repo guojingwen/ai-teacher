@@ -1,4 +1,5 @@
 import { Message } from '@/types';
+import MicroRecorder from 'mic-recorder-to-mp3';
 
 export async function arrayBufferToBase64(
   arrayBuffer: ArrayBuffer
@@ -75,3 +76,24 @@ class AudioPlayImpl<T extends object = {}> {
 export const audioInst = new AudioPlayImpl<
   Message & { index: number }
 >();
+
+export let initVoiceGrant = async (): Promise<boolean> => {
+  // console.log('授权一次');
+  return new Promise((resolve) => {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(
+      () => {
+        resolve(true);
+      },
+      () => {
+        resolve(false);
+      }
+    );
+  }).then((val: any) => {
+    initVoiceGrant = () => Promise.resolve(val);
+    return val;
+  });
+};
+
+export const Mp3Recorder = new MicroRecorder({
+  bitRate: 128,
+});

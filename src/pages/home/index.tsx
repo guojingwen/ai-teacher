@@ -22,7 +22,6 @@ export default function Home() {
   );
 
   const onAssistantChange = async (_assistant: Assistant) => {
-    console.log('onAssistantChange', _assistant);
     if (_assistant.id === assistant.id) return;
     // 只能有一个会话话， 切换到空会话中
     if (localStorage.emptySessionId) {
@@ -67,11 +66,6 @@ export default function Home() {
       localStorage.emptySessionId = '';
     }
     await sessionStore.removeSession(id);
-    console.log(
-      'removeSession',
-      // getSessionList().length
-      sessionList.length
-    );
     const list = sessionList.filter((session) => session.id !== id);
     toSetSession(list[0]);
     setSessionList(list);

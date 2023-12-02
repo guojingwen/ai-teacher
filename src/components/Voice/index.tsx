@@ -5,16 +5,12 @@ import {
   IconLoader2,
   IconPointer,
 } from '@tabler/icons-react';
-import MicroRecorder from 'mic-recorder-to-mp3';
 import clsx from 'clsx';
 import events from '@/utils/event';
 import { notifications } from '@mantine/notifications';
 import { API_KEY } from '@/utils/constant';
 import device from '@/utils/device';
-
-const Mp3Recorder = new MicroRecorder({
-  bitRate: 128,
-});
+import { Mp3Recorder, initVoiceGrant } from '@/utils/utils';
 
 let recordStart = Date.now();
 export default function Voice() {
@@ -28,14 +24,7 @@ export default function Voice() {
   const isLight = colorScheme === 'light';
   // get audio granted
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(
-      () => {
-        setIsGranted(true);
-      },
-      () => {
-        setIsGranted(false);
-      }
-    );
+    initVoiceGrant().then(setIsGranted);
   });
   const start = () => {
     if (!localStorage[API_KEY]) {
