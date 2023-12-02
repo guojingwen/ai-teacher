@@ -191,8 +191,8 @@ const MessageComp = ({ session, assistant }: Props) => {
 
     //  4. text to speech
     const audio = await client.audio.speech.create({
-      model: assistant.voiceModel,
-      voice: assistant.voiceType,
+      model: assistant.voiceModel || 'tts-1',
+      voice: assistant.voiceType || 'alloy',
       input: respText as string,
     });
     const arrayBuffer = await audio.arrayBuffer();
@@ -303,8 +303,8 @@ const MessageComp = ({ session, assistant }: Props) => {
       dangerouslyAllowBrowser: true,
     });
     const audio = await client.audio.speech.create({
-      model: 'tts-1',
-      voice: 'nova',
+      model: assistant.voiceModel || 'tts-1',
+      voice: assistant.voiceType || 'alloy',
       input: item.content,
     });
     const arrayBuffer = await audio.arrayBuffer();
