@@ -41,9 +41,15 @@ export default function MessageContent({
         ) : (
           ''
         )} */}
-        <ActionIcon onClick={() => toSpeak(item, index)}>
-          <IconSpeakerphone color={_theColor} />
-        </ActionIcon>
+        {item.audioBase64 ? (
+          <audio controls>
+            <source src={item.audioBase64} />
+          </audio>
+        ) : (
+          <ActionIcon onClick={() => toSpeak(item, index)}>
+            <IconSpeakerphone color={_theColor} />
+          </ActionIcon>
+        )}
       </div>
       <div
         className={clsx(

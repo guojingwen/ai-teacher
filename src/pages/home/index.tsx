@@ -101,7 +101,7 @@ export default function Home() {
         height: device.isIos ? `${window.innerHeight}px` : '100vh',
       }}>
       <MediaQuery
-        smallerThan='md'
+        smallerThan='sm'
         styles={{
           width: '0 !important',
           padding: '0 !important',

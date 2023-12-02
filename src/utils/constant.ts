@@ -1,4 +1,4 @@
-import { Model } from '@/types';
+import { Model, VOICETYPE } from '@/types';
 
 export const MESSAGE_STORE = 'ai_assistant_message';
 export const SESSION_STORE = 'ai_assistant_session';
@@ -13,6 +13,7 @@ export const USERMAP = {
   assistant: '助手',
   system: '系统',
 };
+
 export const ASSISTANT_INIT = [
   {
     name: 'AI助手',
@@ -21,5 +22,16 @@ export const ASSISTANT_INIT = [
     max_log: 20,
     max_tokens: 800,
     model: 'gpt-3.5-turbo' as Model,
+    voiceModel: 'tts-1' as 'tts-1' | 'tts-1-hd',
+    voiceType: 'alloy' as VOICETYPE,
   },
+];
+export const VOICE_MODEL = ['tts-1', 'tts-1-hd'];
+export const VOICE_TYPES = [
+  'alloy',
+  'echo',
+  'fable',
+  'onyx',
+  'nova',
+  'shimmer',
 ];

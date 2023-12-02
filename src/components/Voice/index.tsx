@@ -48,7 +48,7 @@ export default function Voice() {
     });
   };
   const end = () => {
-    if (Date.now() - recordStart < 1000) {
+    if (Date.now() - recordStart < 600) {
       Mp3Recorder.stop();
       notifications.show({
         id: 'warning',

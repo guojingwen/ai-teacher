@@ -41,6 +41,7 @@ export const updateMessage = async (
     ...msg,
   };
   delete _msg.audioState; // 这个字段不入库
+  delete _msg.audioBase64; // 这个字段不入库
   const transaction = db.transaction([MESSAGE_STORE], 'readwrite');
   const objectStore = transaction.objectStore(MESSAGE_STORE);
   objectStore[type](_msg);

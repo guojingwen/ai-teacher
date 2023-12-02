@@ -7,6 +7,7 @@ export type Message = {
   content: string;
   audioKey?: number;
   audioState?: AudioState;
+  audioBase64?: string; // ios or safari 浏览器不支持自动播放音频的hack的方案
 };
 export type ToObj<T extends object> = {
   [P in keyof T]: T[P];
@@ -15,7 +16,7 @@ export type MessageAndIndex = ToObj<Message & { index?: number }>;
 
 export type SendMessage = Omit<
   Message,
-  'id' | 'sessionId' | 'audioKey' | 'audioState'
+  'id' | 'sessionId' | 'audioKey' | 'audioState' | 'audioBase64'
 >;
 
 export type MessageList = Message[];
@@ -38,6 +39,13 @@ export type Model =
   | 'gpt-3.5-turbo'
   | 'gpt-4-vision-preview'
   | 'gpt-4-1106-preview';
+export type VOICETYPE =
+  | 'alloy'
+  | 'echo'
+  | 'fable'
+  | 'onyx'
+  | 'nova'
+  | 'shimmer';
 export type Assistant = {
   id: string;
   name: string;
@@ -47,6 +55,8 @@ export type Assistant = {
   max_log: number;
   max_tokens: number;
   model: Model;
+  voiceModel: 'tts-1' | 'tts-1-hd';
+  voiceType: VOICETYPE;
 };
 
 export type AssistantList = Assistant[];

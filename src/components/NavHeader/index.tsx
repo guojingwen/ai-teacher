@@ -5,6 +5,7 @@ import { Assistant, SelectSessionProps } from '@/types';
 import Setting from '../Setting';
 import device from '@/utils/device';
 import SessionSelect from '@/components/SessionSelect';
+import { useState } from 'react';
 
 type Props = {
   assistantId: string;
@@ -21,9 +22,7 @@ export default function NavHeader({
       <div className='flex flex-row justify-between items-center'>
         {device.isMobile ? (
           <SessionSelect {...selectSessionProps} />
-        ) : (
-          <SessionSelect {...selectSessionProps} />
-        )}
+        ) : null}
         <AssistantSelect
           value={assistantId}
           onChange={onAssistantChange}
@@ -36,16 +35,6 @@ export default function NavHeader({
       <div className='flex w-12 flex-row justify-between items-center'>
         <ThemeSwitch></ThemeSwitch>
         <Setting></Setting>
-        <audio controls>
-          <source
-            src='https://static.warmplace.cn/ai-teacher.mp3'
-            type='audio/mpeg'
-          />
-          <source
-            src='https://static.warmplace.cn/ai-teacher.wav'
-            type='audio/wav'
-          />
-        </audio>
       </div>
     </div>
   );

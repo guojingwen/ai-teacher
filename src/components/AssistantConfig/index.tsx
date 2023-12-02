@@ -1,7 +1,8 @@
-import { EditAssistant, Model } from '@/types';
+import { EditAssistant, Model, VOICETYPE } from '@/types';
 import React, { FormEvent, useState } from 'react';
 import { IconDeviceFloppy, IconTrash } from '@tabler/icons-react';
 import { Button, Input, Select } from '@mantine/core';
+import { VOICE_MODEL, VOICE_TYPES } from '@/utils/constant';
 
 const { Wrapper } = Input;
 
@@ -47,6 +48,18 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
     setData({
       ...data,
       model: value,
+    });
+  };
+  const onVoiceModelChange = (value: 'tts-1' | 'tts-1-hd') => {
+    setData({
+      ...data,
+      voiceModel: value,
+    });
+  };
+  const onVoiceTypeChange = (value: VOICETYPE) => {
+    setData({
+      ...data,
+      voiceType: value,
     });
   };
   return (
@@ -120,6 +133,32 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
             onChange={(val) =>
               onNumberChange(val, 'max_tokens')
             }></Input>
+        </Wrapper>
+        <Wrapper
+          label='语音质量'
+          description='tts-1普通，tts-1-hd高清'>
+          <Select
+            size='sm'
+            onChange={onVoiceModelChange}
+            value={data.voiceModel}
+            className='w-40 mx-2'
+            data={VOICE_MODEL.map((item) => ({
+              value: item,
+              label: item,
+            }))}></Select>
+        </Wrapper>
+        <Wrapper
+          label='声音的类型'
+          description='选择你喜欢的声音类型'>
+          <Select
+            size='sm'
+            onChange={onVoiceTypeChange}
+            value={data.voiceType}
+            className='w-40 mx-2'
+            data={VOICE_TYPES.map((item) => ({
+              value: item,
+              label: item,
+            }))}></Select>
         </Wrapper>
         <div className='flex justify-around mt-4'>
           <Button

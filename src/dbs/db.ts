@@ -93,6 +93,8 @@ export async function initDB() {
     id: `${Date.now()}`,
     name: `助理_1 号`,
     model: 'gpt-3.5-turbo',
+    voiceModel: 'tts-1',
+    voiceType: 'alloy',
   };
   objectStore.add(newAssistant);
   localStorage.assistantId = newAssistant.id;

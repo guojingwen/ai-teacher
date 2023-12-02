@@ -35,6 +35,7 @@ import {
 } from '@/utils/utils';
 import { useGetState } from '@/utils/hooks';
 import MessageContent from './MessageContent';
+import device from '@/utils/device';
 
 type Props = {
   session: Session;
@@ -190,8 +191,8 @@ const MessageComp = ({ session, assistant }: Props) => {
 
     //  4. text to speech
     const audio = await client.audio.speech.create({
-      model: 'tts-1',
-      voice: 'nova',
+      model: assistant.voiceModel,
+      voice: assistant.voiceType,
       input: respText as string,
     });
     const arrayBuffer = await audio.arrayBuffer();
@@ -256,27 +257,33 @@ const MessageComp = ({ session, assistant }: Props) => {
       newList.splice(i, 1, newItem);
       setMessageList(newList);
     } else {
+      if (device.isSafari || device.isIos) {
+        console.log('safari', item.audioKey);
+        let audioBase64: string;
+        let audioKey = item.audioKey;
+        if (item.audioKey) {
+          audioBase64 = await audioStore.getAudio(item.audioKey!);
+        } else {
+          [audioKey, audioBase64] = await addAudioResource(item);
+        }
+        const newItem: Message = {
+          ...item,
+          audioKey,
+          audioState: 'done',
+          audioBase64,
+        };
+        await messageStore.updateMessage(newItem);
+        newList.splice(i, 1, newItem);
+        playVoice(newList, audioBase64, i);
+        return;
+      }
       audioState = 'playing';
       if (item.audioKey) {
         const audioBase64 = await audioStore.getAudio(item.audioKey!);
         playVoice(newList, audioBase64, i);
         return;
       }
-      console.log('请求语音播放', item.content);
-      const client = new OpenAI({
-        apiKey: localStorage[API_KEY],
-        dangerouslyAllowBrowser: true,
-      });
-      const audio = await client.audio.speech.create({
-        model: 'tts-1',
-        voice: 'nova',
-        input: item.content,
-      });
-      const arrayBuffer = await audio.arrayBuffer();
-      const audioBase64 = await arrayBufferToBase64(arrayBuffer);
-
-      // 存储
-      const audioKey = await audioStore.addAudio(audioBase64);
+      const [audioKey, audioBase64] = await addAudioResource(item);
       const newItem: Message = {
         ...item,
         audioKey,
@@ -288,6 +295,25 @@ const MessageComp = ({ session, assistant }: Props) => {
       return;
     }
   };
+  async function addAudioResource(
+    item: Message
+  ): Promise<[number, string]> {
+    const client = new OpenAI({
+      apiKey: localStorage[API_KEY],
+      dangerouslyAllowBrowser: true,
+    });
+    const audio = await client.audio.speech.create({
+      model: 'tts-1',
+      voice: 'nova',
+      input: item.content,
+    });
+    const arrayBuffer = await audio.arrayBuffer();
+    const audioBase64 = await arrayBufferToBase64(arrayBuffer);
+
+    // 存储
+    const audioKey = await audioStore.addAudio(audioBase64);
+    return [audioKey, audioBase64];
+  }
   return (
     <>
       <div
