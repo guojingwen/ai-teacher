@@ -19,13 +19,15 @@
 - [x] 支持发送文字，支持打字效果、支持 markdown 渲染、支持中断回复。
 - [x] 支持语音功能，类似微信语音，使用 indexedDB 存储，可回放。注意：官方并不支持直接语音，需要通过文字转语音，语音再转文字的接口中转
 - [x] 支持主题切换
+- [ ] ios safari支持
+- [ ] 支持朗读模式（帮助小孩读题，小朋友通过微信拍照识别图片文字，复制的这里，AI读题）
 
 ## 技术栈
 
 - 项目使用`create-react-app`生成，命令： `npx create-react-app ai-teacher --template typescript`
 - 样式集成了 `tailwindcss`，UI 集成了`@mantine/core`，封装了`indexedDB`存储数据，无后端服务。
 
-下面的东西是补充的内容，我有一些我的用途，如果你不熟悉下面的东西，可以找历史版看，我是先完整测试通过，再集成CICD和代码规范的。
+下面的东西是补充的内容，如果你不熟悉下面的东西，可以找历史版看，我是先完整测试通过，再集成CICD和代码规范的。
 
 - 教授架默认集成了`eslint`和`jest`，另外`prettier`只需通过命令行生成配置文件即可，脚手架已处理`eslint`与`prettier`的冲突
 - 代码规范方案： `editorConfig` + `prettier` + `eslint` + `stylelint` + `lint-staged` + `commitlint`
