@@ -1,8 +1,18 @@
-import { EditAssistant, Model, VOICETYPE } from '@/types';
+import {
+  AssistantMode,
+  EditAssistant,
+  Model,
+  VOICETYPE,
+  Voice_Model,
+} from '@/types';
 import React, { FormEvent, useState } from 'react';
 import { IconDeviceFloppy, IconTrash } from '@tabler/icons-react';
-import { Button, Input, Select } from '@mantine/core';
-import { VOICE_MODEL, VOICE_TYPES } from '@/utils/constant';
+import { Button, Group, Input, Radio, Select } from '@mantine/core';
+import {
+  ASSISTANT_MODE,
+  VOICE_MODEL,
+  VOICE_TYPES,
+} from '@/utils/constant';
 
 const { Wrapper } = Input;
 
@@ -50,7 +60,7 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
       model: value,
     });
   };
-  const onVoiceModelChange = (value: 'tts-1' | 'tts-1-hd') => {
+  const onVoiceModelChange = (value: Voice_Model) => {
     setData({
       ...data,
       voiceModel: value,
@@ -60,6 +70,13 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
     setData({
       ...data,
       voiceType: value,
+    });
+  };
+  const onChangeMode = (_mode: AssistantMode) => {
+    console.log(_mode);
+    setData({
+      ...data,
+      mode: _mode,
     });
   };
   return (
@@ -74,15 +91,10 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
             value={data.name}
             onChange={onChange}></Input>
         </Wrapper>
-        <Wrapper label='指令' description='为角色分配的系统指令'>
-          <Input
-            type='textarea'
-            variant='filled'
-            value={data.prompt}
-            name='prompt'
-            onChange={(val) => onChange(val, 'prompt')}></Input>
-        </Wrapper>
-        <Wrapper label='model' description='选择model'>
+        <div className='flex flex-row items-end justify-start'>
+          <Wrapper label='model' description='选择model'>
+            {' '}
+          </Wrapper>
           <Select
             size='sm'
             onChange={onModelChange}
@@ -92,51 +104,97 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
               value: item,
               label: item,
             }))}></Select>
-        </Wrapper>
+        </div>
+        <div className='flex flex-row items-end justify-start'>
+          <Wrapper label='模式' description=''>
+            {' '}
+          </Wrapper>
+          <Group mt='xs' className='ml-4'>
+            {ASSISTANT_MODE.map((it) => (
+              <Radio
+                {...it}
+                key={it.value}
+                checked={it.value === data.mode}
+                onChange={() => onChangeMode(it.value)}
+              />
+            ))}
+          </Group>
+        </div>
+        {data.mode === 'dialog' ? (
+          <>
+            <Wrapper label='指令' description='为角色分配的系统指令'>
+              <Input
+                type='textarea'
+                variant='filled'
+                value={data.prompt}
+                name='prompt'
+                onChange={(val) => onChange(val, 'prompt')}></Input>
+            </Wrapper>
+            <div className='flex flex-row items-end justify-start'>
+              <Wrapper
+                label='创意度'
+                description='数值越大，创意度越高'>
+                {' '}
+              </Wrapper>
+              <Input
+                type='number'
+                variant='filled'
+                className='w-18 mx-2'
+                max={1}
+                min={0}
+                step='0.01'
+                value={data.temperature}
+                name='temperature'
+                onChange={(val) =>
+                  onNumberChange(val, 'temperature')
+                }></Input>
+            </div>
+            <div className='flex flex-row items-end justify-start'>
+              <Wrapper
+                label='上下文数'
+                description='每次对话记忆的对话次数'>
+                {' '}
+              </Wrapper>
+              <Input
+                type='number'
+                variant='filled'
+                className='w-20 mx-2'
+                max={2000}
+                min={1}
+                value={data.max_log}
+                name='max_log'
+                onChange={(val) =>
+                  onNumberChange(val, 'max_log')
+                }></Input>
+            </div>
+            <div className='flex flex-row items-end justify-start'>
+              <Wrapper
+                label='回复长度'
+                description='回复内容的长度限制'>
+                {' '}
+              </Wrapper>
+              <Input
+                type='number'
+                variant='filled'
+                className='w-20 mx-2'
+                max={2000}
+                min={50}
+                step={50}
+                value={data.max_tokens}
+                name='max_tokens'
+                onChange={(val) =>
+                  onNumberChange(val, 'max_tokens')
+                }></Input>
+            </div>
+          </>
+        ) : null}
 
-        <Wrapper label='创意度' description='数值越大，创意度越高'>
-          <Input
-            type='number'
-            variant='filled'
-            max={1}
-            min={0}
-            step='0.01'
-            value={data.temperature}
-            name='temperature'
-            onChange={(val) =>
-              onNumberChange(val, 'temperature')
-            }></Input>
-        </Wrapper>
-        <Wrapper
-          label='上下文数'
-          description='每次对话记忆的对话次数'>
-          <Input
-            type='number'
-            variant='filled'
-            max={2000}
-            min={1}
-            value={data.max_log}
-            name='max_log'
-            onChange={(val) =>
-              onNumberChange(val, 'max_log')
-            }></Input>
-        </Wrapper>
-        <Wrapper label='回复长度' description='回复内容的长度限制'>
-          <Input
-            type='number'
-            variant='filled'
-            max={2000}
-            min={50}
-            step={50}
-            value={data.max_tokens}
-            name='max_tokens'
-            onChange={(val) =>
-              onNumberChange(val, 'max_tokens')
-            }></Input>
-        </Wrapper>
-        <Wrapper
-          label='语音质量'
-          description='tts-1普通，tts-1-hd高清'>
+        <div className='flex flex-row items-end justify-start'>
+          <Wrapper
+            label='语音质量'
+            description='tts-1普通，tts-1-hd高清'>
+            {''}
+          </Wrapper>
           <Select
             size='sm'
             onChange={onVoiceModelChange}
@@ -146,10 +204,14 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
               value: item,
               label: item,
             }))}></Select>
-        </Wrapper>
-        <Wrapper
-          label='声音的类型'
-          description='选择你喜欢的声音类型'>
+        </div>
+
+        <div className='flex flex-row items-end justify-start'>
+          <Wrapper
+            label='声音的类型'
+            description='选择你喜欢的声音类型'>
+            {''}
+          </Wrapper>
           <Select
             size='sm'
             onChange={onVoiceTypeChange}
@@ -159,7 +221,8 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
               value: item,
               label: item,
             }))}></Select>
-        </Wrapper>
+        </div>
+
         <div className='flex justify-around mt-4'>
           <Button
             type='submit'

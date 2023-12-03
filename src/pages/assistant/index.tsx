@@ -23,7 +23,6 @@ import AssistionConfig from '@/components/AssistantConfig';
 const showNotification = (message: string) => {
   notifications.show({
     id: 'Success',
-    title: 'Success',
     message,
     color: 'green',
     autoClose: 2000,

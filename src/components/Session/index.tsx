@@ -41,6 +41,7 @@ const SessionComp = ({
   updateSession,
   removeSession,
 }: Props) => {
+  console.log('render SessionComp', session.name);
   const { colorScheme } = useMantineColorScheme();
 
   return (
@@ -61,7 +62,6 @@ const SessionComp = ({
         onSave={(name) =>
           updateSession(session, name)
         }></EdittableText>
-      {/* <div>{name}</div> */}
       {showTrash ? (
         <IconTrash
           size='.8rem'

@@ -22,14 +22,15 @@
  * - IDBKeyRange
  */
 
-import { Assistant } from '@/types';
 import {
-  ASSISTANT_INIT,
+  ASSISTANT_ID,
   ASSISTANT_STORE,
   AUDIO_STORE,
+  EMPTY_SESSION_ID,
   MESSAGE_STORE,
   SESSION_STORE,
 } from '@/utils/constant';
+import assistants from './initAssistant';
 
 let _resolve: (value: IDBDatabase) => any,
   _reject: (value: unknown) => any;
@@ -39,7 +40,7 @@ let dbInstance: Promise<IDBDatabase> = new Promise(
     _reject = reject;
   }
 );
-const request = window.indexedDB.open('english-assistant', 2);
+const request = window.indexedDB.open('english-assistant2', 2);
 request.onerror = function (event) {
   console.log('onerror', event);
   _reject(event);
@@ -75,39 +76,33 @@ request.onsuccess = async function (event) {
   // console.log('onsuccess', event);
   _resolve(request.result);
   console.log('数据库打开成功');
-  (window as any).myDb = request.result;
+  // (window as any).myDb = request.result;
 };
 
 export default dbInstance;
 
 export async function initDB() {
   const db = await dbInstance;
-  if (localStorage.assistantId) return;
+  if (localStorage[ASSISTANT_ID]) return;
   const transaction = db.transaction(
     [ASSISTANT_STORE, SESSION_STORE],
     'readwrite'
   );
   const objectStore = transaction.objectStore(ASSISTANT_STORE);
-  const newAssistant: Assistant = {
-    ...ASSISTANT_INIT[0],
-    id: `${Date.now()}`,
-    name: `助理_1 号`,
-    model: 'gpt-3.5-turbo',
-    voiceModel: 'tts-1',
-    voiceType: 'alloy',
-  };
-  objectStore.add(newAssistant);
-  localStorage.assistantId = newAssistant.id;
+  assistants.forEach((assistant) => {
+    objectStore.add(assistant);
+  });
+  localStorage[ASSISTANT_ID] = assistants[0].id;
 
   const objectStore2 = transaction.objectStore(SESSION_STORE);
   const sessionId = `${Date.now()}`;
-  localStorage.emptySessionId = sessionId;
+  localStorage[EMPTY_SESSION_ID] = sessionId;
 
   objectStore2.add({
     id: sessionId,
-    name: `session=1`,
+    name: `${assistants[0].name}-会话`,
     model: 'gpt-3.5-turbo',
-    assistantId: localStorage.assistantId,
+    assistantId: localStorage[ASSISTANT_ID],
   });
   return new Promise((resolve) => {
     transaction.oncomplete = () => {

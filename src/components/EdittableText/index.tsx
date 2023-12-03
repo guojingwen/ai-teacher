@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   text: string;
@@ -8,6 +8,9 @@ type Props = {
 const EdittableText = (props: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(props.text);
+  useEffect(() => {
+    setText(props.text);
+  }, [props.text]);
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };

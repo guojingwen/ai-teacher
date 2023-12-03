@@ -1,12 +1,10 @@
-# 使用 ChatGPT 开发英语学习助手
+# 使用 ChatGPT 开发学习助手
 
 ![image](./files/welcome.webp)
 
 [视频效果点这里](https://static.warmplace.cn/ai-teacher.mp4)
 
 [在线链接](https://static.warmplace.cn/ai-teacher)
-
-## 英语学习助手
 
 通过这个项目帮你快速上手 ChatGPT 的前端开发
 
@@ -19,7 +17,7 @@
 - [x] 支持发送文字，支持打字效果、支持 markdown 渲染、支持中断回复。
 - [x] 支持语音功能，类似微信语音，使用 indexedDB 存储，可回放。注意：官方并不支持直接语音，需要通过文字转语音，语音再转文字的接口中转
 - [x] 支持主题切换
-- [x] ios safari支持 (因苹果限制，语音不支持自动播放，需手动点击)
+- [x] 支持 android8.0，ios13.0
 - [x] 支持朗读模式（帮助小孩读题，小朋友通过微信拍照识别图片文字，复制的这里，AI读题）
 
 ## 技术栈

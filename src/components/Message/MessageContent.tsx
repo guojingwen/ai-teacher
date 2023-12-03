@@ -32,24 +32,11 @@ export default function MessageContent({
     <div className='flex flex-col'>
       <div className='text-lg font-medium flex flex-row items-center'>
         {USERMAP[item.role] /*  + ' ' + item.audioKey */}
-        {/* {item.audioKey ? (
-          <ActionIcon onClick={() => toSpeak(item, index)}>
-            <IconSpeakerphone
-              color={Colors[item.audioState || 'done']}
-            />
-          </ActionIcon>
-        ) : (
-          ''
-        )} */}
-        {item.audioBase64 ? (
-          <audio controls>
-            <source src={item.audioBase64} />
-          </audio>
-        ) : (
+        {
           <ActionIcon onClick={() => toSpeak(item, index)}>
             <IconSpeakerphone color={_theColor} />
           </ActionIcon>
-        )}
+        }
       </div>
       <div
         className={clsx(

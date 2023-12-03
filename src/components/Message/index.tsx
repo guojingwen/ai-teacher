@@ -13,7 +13,7 @@ import {
   IconRobot,
   IconUser,
 } from '@tabler/icons-react';
-import { API_KEY } from '@/utils/constant';
+import { API_KEY, EMPTY_SESSION_ID } from '@/utils/constant';
 import events from '@/utils/event';
 import './message.css';
 import { IconKeyboard, IconMicrophone } from '@tabler/icons-react';
@@ -27,7 +27,6 @@ import {
 } from '@/types';
 import clsx from 'clsx';
 import Voice from '../Voice';
-import OpenAI from 'openai';
 import {
   Mp3Recorder,
   arrayBufferToBase64,
@@ -37,6 +36,7 @@ import {
 import { useGetState } from '@/utils/hooks';
 import MessageContent from './MessageContent';
 import device from '@/utils/device';
+import getClient from '@/utils/openAI';
 
 type Props = {
   session: Session;
@@ -113,21 +113,59 @@ const MessageComp = ({ session, assistant }: Props) => {
   };
 
   const onSubmit = async (_prompt?: string, audioKey?: number) => {
+    const newPrompt = prompt.trim() || _prompt;
+    if (!newPrompt) return;
     if (!localStorage[API_KEY]) {
       await new Promise((resolve) => {
         events.emit('needToken', resolve);
       });
     }
+    if (assistant.mode === 'convert') {
+      // 语音转文字
+      const lastMsg: Message = {
+        id: `${Date.now()}`,
+        role: 'user',
+        content: newPrompt,
+        sessionId: session.id,
+        audioKey: -1,
+        audioState: 'loading',
+      };
+      messageStore.addMessage(lastMsg);
+      const mgs = getMessageList().slice();
+      if (!mgs.length) {
+        // 最多只能有一个空会话
+        localStorage[EMPTY_SESSION_ID] = '';
+      }
+      setMessageList([...mgs, lastMsg]);
+      setPrompt('');
+      setTimeout(() => {
+        scrollRef.current!.scrollTop += 200;
+      }, 100);
+
+      const audio = await getClient().audio.speech.create({
+        model: assistant.voiceModel,
+        voice: assistant.voiceType,
+        input: newPrompt,
+      });
+      const arrayBuffer = await audio.arrayBuffer();
+      const audioBase64 = await arrayBufferToBase64(arrayBuffer);
+      // 存储
+      const audioKey = await audioStore.addAudio(audioBase64);
+      lastMsg.audioKey = audioKey;
+      lastMsg.audioState = 'playing';
+      messageStore.updateMessage(lastMsg);
+      const newList = [...mgs, lastMsg];
+      playVoice(newList, audioBase64, newList.length - 1);
+      return;
+    }
     if (loading) {
       chatService.cancel();
       return;
     }
-    const newPrompt = prompt.trim() || _prompt;
-    if (!newPrompt) return;
     const _msgs = getMessageList();
     if (!_msgs.length) {
       // 最多只能有一个空会话
-      localStorage.emptySessionId = '';
+      localStorage[EMPTY_SESSION_ID] = '';
     }
     const lastMsg: Message = {
       id: `${Date.now()}`,
@@ -172,15 +210,30 @@ const MessageComp = ({ session, assistant }: Props) => {
     const audioKeyPromise = audioStore.addAudio(sendAudio);
 
     // 2 speech to text
-    const client = new OpenAI({
-      apiKey: localStorage[API_KEY],
-      dangerouslyAllowBrowser: true,
-    });
     const file = new File([blob], 'prompt.mp3');
-    const transcription = await client.audio.transcriptions.create({
-      file,
-      model: 'whisper-1',
-    });
+    const transcription =
+      await getClient().audio.transcriptions.create({
+        file,
+        model: 'whisper-1',
+      });
+    if (assistant.mode === 'convert') {
+      // 语音转文字
+      __resolve();
+      const lastMsg: Message = {
+        id: `${Date.now()}`,
+        role: 'user',
+        content: transcription.text,
+        sessionId: session.id,
+        audioKey: await audioKeyPromise,
+        audioState: 'done',
+      };
+      messageStore.addMessage(lastMsg);
+      const newList = [...getMessageList(), lastMsg];
+      setMessageList(newList);
+      // const audioBase64 = await blobToBase64(blob);
+      // playVoice(newList, audioBase64, newList.length - 1);
+      return;
+    }
     onSubmit(transcription.text, await audioKeyPromise); // 请求
 
     // 3 text completion
@@ -190,9 +243,9 @@ const MessageComp = ({ session, assistant }: Props) => {
     __resolve(); // 更新 <NewVoice/> 状态
 
     //  4. text to speech
-    const audio = await client.audio.speech.create({
-      model: assistant.voiceModel || 'tts-1',
-      voice: assistant.voiceType || 'alloy',
+    const audio = await getClient().audio.speech.create({
+      model: assistant.voiceModel,
+      voice: assistant.voiceType,
       input: respText as string,
     });
     const arrayBuffer = await audio.arrayBuffer();
@@ -207,11 +260,16 @@ const MessageComp = ({ session, assistant }: Props) => {
     messageStore.updateMessage(lastMsg);
     playVoice(newList, audioBase64, len - 1);
   };
-  const playVoice = (
+  const playVoice = async (
     msgs: MessageList,
     audioBase64: string,
     index: number
   ) => {
+    if ((device.isSafari || device.isIos) && !window._voiceOpened) {
+      await new Promise((resolve) => {
+        events.emit('toOpenVoice', resolve);
+      });
+    }
     const old = audioInst.getAddi();
     const newList = msgs.slice();
     if (old) {
@@ -245,7 +303,7 @@ const MessageComp = ({ session, assistant }: Props) => {
   const toSpeak = async (item: Message, i: number) => {
     const newList = getMessageList().slice();
     let audioState = item.audioState;
-    if (audioState === 'loading') return;
+    if (audioState === 'loading' && item.audioKey) return;
     if (audioState === 'playing') {
       audioInst.stop();
       audioState = 'done';
@@ -256,24 +314,10 @@ const MessageComp = ({ session, assistant }: Props) => {
       newList.splice(i, 1, newItem);
       setMessageList(newList);
     } else {
-      if (device.isSafari || device.isIos) {
-        let audioBase64: string;
-        let audioKey = item.audioKey;
-        if (item.audioKey) {
-          audioBase64 = await audioStore.getAudio(item.audioKey!);
-        } else {
-          [audioKey, audioBase64] = await addAudioResource(item);
-        }
-        const newItem: Message = {
-          ...item,
-          audioKey,
-          audioState: 'done',
-          audioBase64,
-        };
-        await messageStore.updateMessage(newItem);
-        newList.splice(i, 1, newItem);
-        playVoice(newList, audioBase64, i);
-        return;
+      if ((device.isSafari || device.isIos) && !window._voiceOpened) {
+        await new Promise((resolve) => {
+          events.emit('toOpenVoice', resolve);
+        });
       }
       audioState = 'playing';
       if (item.audioKey) {
@@ -296,13 +340,9 @@ const MessageComp = ({ session, assistant }: Props) => {
   async function addAudioResource(
     item: Message
   ): Promise<[number, string]> {
-    const client = new OpenAI({
-      apiKey: localStorage[API_KEY],
-      dangerouslyAllowBrowser: true,
-    });
-    const audio = await client.audio.speech.create({
-      model: assistant.voiceModel || 'tts-1',
-      voice: assistant.voiceType || 'alloy',
+    const audio = await getClient().audio.speech.create({
+      model: assistant.voiceModel,
+      voice: assistant.voiceType,
       input: item.content,
     });
     const arrayBuffer = await audio.arrayBuffer();

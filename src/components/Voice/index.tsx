@@ -41,8 +41,7 @@ export default function Voice() {
       Mp3Recorder.stop();
       notifications.show({
         id: 'warning',
-        title: '',
-        message: '说话时间太短！',
+        message: '录音时间不能少于0.6秒！',
         autoClose: 2000,
       });
       setIsRecording(false);

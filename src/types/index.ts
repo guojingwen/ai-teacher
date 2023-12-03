@@ -1,5 +1,3 @@
-import { util } from 'prettier';
-
 export type Role = 'user' | 'assistant' | 'system';
 export type AudioState = 'loading' | 'playing' | 'done';
 export type Message = {
@@ -57,6 +55,7 @@ export type Assistant = {
   max_log: number;
   max_tokens: number;
   model: Model;
+  mode: AssistantMode;
   voiceModel: 'tts-1' | 'tts-1-hd';
   voiceType: VOICETYPE;
 };
@@ -73,3 +72,5 @@ export interface SelectSessionProps {
   removeSession: any;
   sessionId: string;
 }
+export type Voice_Model = 'tts-1' | 'tts-1-hd';
+export type AssistantMode = 'dialog' | 'convert';

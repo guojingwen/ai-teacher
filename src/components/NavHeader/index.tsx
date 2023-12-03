@@ -5,7 +5,6 @@ import { Assistant, SelectSessionProps } from '@/types';
 import Setting from '../Setting';
 import device from '@/utils/device';
 import SessionSelect from '@/components/SessionSelect';
-import { useState } from 'react';
 
 type Props = {
   assistantId: string;
@@ -22,7 +21,9 @@ export default function NavHeader({
       <div className='flex flex-row justify-between items-center'>
         {device.isMobile ? (
           <SessionSelect {...selectSessionProps} />
-        ) : null}
+        ) : (
+          <SessionSelect {...selectSessionProps} />
+        )}
         <AssistantSelect
           value={assistantId}
           onChange={onAssistantChange}

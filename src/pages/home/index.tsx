@@ -12,6 +12,7 @@ import { useMantineColorScheme, ActionIcon } from '@mantine/core';
 import clsx from 'clsx';
 import { IconMessagePlus } from '@tabler/icons-react';
 import device from '@/utils/device';
+import { ASSISTANT_ID, EMPTY_SESSION_ID } from '@/utils/constant';
 
 export default function Home() {
   const { colorScheme } = useMantineColorScheme();
@@ -22,15 +23,44 @@ export default function Home() {
   );
 
   const onAssistantChange = async (_assistant: Assistant) => {
-    if (_assistant.id === assistant.id) return;
-    // 只能有一个会话话， 切换到空会话中
-    if (localStorage.emptySessionId) {
+    console.log(
+      'onAssistantChange',
+      _assistant,
+      localStorage[ASSISTANT_ID]
+    );
+    if (_assistant.id === assistant.id) {
+      console.log('更新_assistant name');
+      return;
+    }
+
+    // 只能有一个会话， 切换到空会话中
+    if (localStorage[EMPTY_SESSION_ID]) {
       const sessionList = await sessionStore.getSessions();
-      sessionList[0].assistantId = localStorage.assistantId;
-      toSetSession(sessionList[0]);
+      const firstSession = {
+        ...sessionList[0],
+      };
+      firstSession.assistantId = localStorage[ASSISTANT_ID];
+      const assistant = (await assistantStore.getAssistant(
+        localStorage[ASSISTANT_ID]
+      ))!;
+      setAssistant(assistant);
+      firstSession.name = getNewSessionName(assistant); // 更新会话的名称
+      setSession(firstSession);
+      await sessionStore.updateSession(firstSession);
+      const newSessionList = [firstSession, ...sessionList.slice(1)];
+      setSessionList(newSessionList);
       return;
     }
     createSession();
+  };
+  const getNewSessionName = (assistant: Assistant): string => {
+    const suffix = sessionList.reduce((sum, it) => {
+      if (it.assistantId === assistant.id) {
+        sum += 1;
+      }
+      return sum;
+    }, 0);
+    return `${assistant.name}-会话${suffix ? `${suffix + 1}` : ''}`;
   };
 
   useEffect(() => {
@@ -44,26 +74,33 @@ export default function Home() {
         (it) => it.id === assistantId
       )!;
       setAssistant(_assistant);
-      localStorage.assistantId = assistantId;
+      localStorage[ASSISTANT_ID] = assistantId;
     })();
   }, []);
 
   const createSession = async () => {
-    if (localStorage.emptySessionId) return;
+    if (localStorage[EMPTY_SESSION_ID]) return;
     const sessionId = Date.now().toString();
-    localStorage.emptySessionId = sessionId;
+    localStorage[EMPTY_SESSION_ID] = sessionId;
+    let newAssistant = assistant;
+    if (assistant.id !== localStorage[ASSISTANT_ID]) {
+      newAssistant = (await assistantStore.getAssistant(
+        localStorage[ASSISTANT_ID]
+      ))!;
+      setAssistant(newAssistant);
+    }
     const newSession: Session = {
-      name: `session=${sessionList.length + 1}`,
+      name: getNewSessionName(newAssistant),
       id: sessionId,
-      assistantId: localStorage.assistantId,
+      assistantId: localStorage[ASSISTANT_ID],
     };
+    setSession(newSession);
     const list = await sessionStore.addSession(newSession);
     setSessionList(list);
-    toSetSession(newSession);
   };
   const removeSession = async (id: string) => {
-    if (localStorage.emptySessionId === id) {
-      localStorage.emptySessionId = '';
+    if (localStorage[EMPTY_SESSION_ID] === id) {
+      localStorage[EMPTY_SESSION_ID] = '';
     }
     await sessionStore.removeSession(id);
     const list = sessionList.filter((session) => session.id !== id);
@@ -79,7 +116,7 @@ export default function Home() {
   };
   const toSetSession = async (_session: Session) => {
     await audioInst.stop();
-    localStorage.assistantId = _session.assistantId;
+    localStorage[ASSISTANT_ID] = _session.assistantId;
     setSession(_session);
     await sessionStore.updateSession(_session);
     const assistant = await assistantStore.getAssistant(
