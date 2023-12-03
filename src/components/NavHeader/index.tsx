@@ -21,9 +21,7 @@ export default function NavHeader({
       <div className='flex flex-row justify-between items-center'>
         {device.isMobile ? (
           <SessionSelect {...selectSessionProps} />
-        ) : (
-          <SessionSelect {...selectSessionProps} />
-        )}
+        ) : null}
         <AssistantSelect
           value={assistantId}
           onChange={onAssistantChange}
