@@ -7,7 +7,7 @@ export type Message = {
   content: string;
   audioKey?: number;
   audioState?: AudioState;
-  audioBase64?: string; // ios or safari 浏览器不支持自动播放音频的hack的方案
+  audioBase64?: string; // ios 浏览器不支持自动播放音频的hack的方案
 };
 export type ToObj<T extends object> = {
   [P in keyof T]: T[P];

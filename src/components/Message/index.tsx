@@ -265,11 +265,27 @@ const MessageComp = ({ session, assistant }: Props) => {
     audioBase64: string,
     index: number
   ) => {
-    if ((device.isSafari || device.isIos) && !window._voiceOpened) {
+    // ios 苹果系统限制，必须用户手动触发音频播放
+    if (device.isIos) {
+      const item = msgs[index];
+      const newItem: Message = {
+        ...item,
+        audioState: 'done',
+        audioBase64,
+      };
+      await messageStore.updateMessage(newItem);
+      const newList = msgs.slice();
+      newList.splice(index, 1, newItem);
+      setMessageList(newList);
+      return;
+    }
+    // mac safari 需要用户手动播放一次
+    if (device.isSafari && !device.isMobile && !window._voiceOpened) {
       await new Promise((resolve) => {
         events.emit('toOpenVoice', resolve);
       });
     }
+
     const old = audioInst.getAddi();
     const newList = msgs.slice();
     if (old) {
@@ -314,11 +330,6 @@ const MessageComp = ({ session, assistant }: Props) => {
       newList.splice(i, 1, newItem);
       setMessageList(newList);
     } else {
-      if ((device.isSafari || device.isIos) && !window._voiceOpened) {
-        await new Promise((resolve) => {
-          events.emit('toOpenVoice', resolve);
-        });
-      }
       audioState = 'playing';
       if (item.audioKey) {
         const audioBase64 = await audioStore.getAudio(item.audioKey!);
