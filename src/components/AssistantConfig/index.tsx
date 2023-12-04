@@ -73,7 +73,6 @@ const AssistantConfig = ({ assistant, save, remove }: Props) => {
     });
   };
   const onChangeMode = (_mode: AssistantMode) => {
-    console.log(_mode);
     setData({
       ...data,
       mode: _mode,

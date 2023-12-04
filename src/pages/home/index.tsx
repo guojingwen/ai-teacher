@@ -23,11 +23,6 @@ export default function Home() {
   );
 
   const onAssistantChange = async (_assistant: Assistant) => {
-    console.log(
-      'onAssistantChange',
-      _assistant,
-      localStorage[ASSISTANT_ID]
-    );
     if (_assistant.id === assistant.id) {
       console.log('更新_assistant name');
       return;

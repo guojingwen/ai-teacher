@@ -8,7 +8,6 @@ let client = new OpenAI({
 });
 
 events.on('ApiKeyChange', () => {
-  console.log('ApiKeyChange', localStorage[API_KEY]);
   client = new OpenAI({
     apiKey: localStorage[API_KEY],
     dangerouslyAllowBrowser: true,

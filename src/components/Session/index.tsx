@@ -41,7 +41,6 @@ const SessionComp = ({
   updateSession,
   removeSession,
 }: Props) => {
-  console.log('render SessionComp', session.name);
   const { colorScheme } = useMantineColorScheme();
 
   return (
