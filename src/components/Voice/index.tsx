@@ -25,7 +25,7 @@ export default function Voice() {
   // get audio granted
   useEffect(() => {
     initVoiceGrant().then(setIsGranted);
-  });
+  }, []);
   const start = () => {
     if (!localStorage[API_KEY]) {
       events.emit('needToken');

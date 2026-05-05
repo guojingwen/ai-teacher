@@ -3,8 +3,7 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    // 文件保存时开启stylelint自动修复程序
-    "source.fixAll.stylelint": true
+    "source.fixAll.stylelint": "explicit"
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -23,5 +22,6 @@
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "stylelint.validate": ["css", "less", "postcss", "scss"]
+  "stylelint.validate": ["css", "less", "postcss", "scss"],
+  "liveServer.settings.port": 5501
 }

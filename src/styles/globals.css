@@ -31,3 +31,25 @@ body {
 p {
   margin: 0;
 }
+
+.app-loader {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #3498db; /* Blue */
+  border-top: 3px solid transparent;
+  animation: spin 1s linear infinite;
+  margin: auto;
+  margin-top: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
