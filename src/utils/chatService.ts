@@ -37,7 +37,8 @@ class ChatService {
       params;
     const { max_tokens, temperature } = options;
     let suggesting = '';
-    const url = 'https://api.openai.com/v1/chat/completions';
+    // const url = 'https://api.openai.com/v1/chat/completions';
+    const url = 'https://api.deepseek.com/chat/completions';
     // https://dash.cloudflare.com/
     // const url =
     // ('https://worker-aged-pond-c762.jackqiao2908.workers.dev/v1/chat/completions');

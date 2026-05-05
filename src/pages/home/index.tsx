@@ -68,6 +68,9 @@ export default function Home() {
       let _assistant = assistants.find(
         (it) => it.id === assistantId
       )!;
+      // deepseek-v4-proa
+      console.log(_assistant);
+      (_assistant as any).model = 'deepseek-v4-pro';
       setAssistant(_assistant);
       localStorage[ASSISTANT_ID] = assistantId;
     })();
