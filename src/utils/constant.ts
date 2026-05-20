@@ -25,7 +25,7 @@ export const ASSISTANT_INIT = [
     temperature: 0.7,
     max_log: 20,
     max_tokens: 800,
-    model: 'gpt-3.5-turbo' as Model,
+    model: 'deepseek-v4-pro' as Model,
     mode: 'dialog' as AssistantMode,
     voiceModel: 'tts-1' as Voice_Model,
     voiceType: 'alloy' as VOICETYPE,

@@ -36,7 +36,7 @@ export type ChatLogsStorageType = {
 };
 
 export type Model =
-  | 'gpt-3.5-turbo'
+  | 'deepseek-v4-pro'
   | 'gpt-4-vision-preview'
   | 'gpt-4-1106-preview';
 export type VOICETYPE =

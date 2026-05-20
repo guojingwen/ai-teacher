@@ -101,7 +101,7 @@ export async function initDB() {
   objectStore2.add({
     id: sessionId,
     name: `${assistants[0].name}-会话`,
-    model: 'gpt-3.5-turbo',
+    model: 'deepseek-v4-pro',
     assistantId: localStorage[ASSISTANT_ID],
   });
   return new Promise((resolve) => {
